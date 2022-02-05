@@ -81,7 +81,9 @@ export async function getHighlightsFromGame(gameId: number) {
     return parsed;
     // separate
   } catch (error) {
-    return { error };
+    console.error(error);
+    return null;
+    // return { error };
   }
 }
 
