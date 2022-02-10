@@ -9,31 +9,45 @@ interface ScheduleData {
       {
         gamePk: number;
         content: {};
+        status: {
+          abstractGameState: string;
+          codedGameState: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+          detailedState: string;
+          statusCode: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+          startTimeTBD: boolean;
+        };
       }
     ];
   }[];
 }
 
+const FINISHED_GAME_CODES = ['5', '6', '7'];
+
 export async function getLatestGameId() {
-  const scheduleUrl = `${BASE_URL}/schedule?teamId=${LEAFS_TEAM_ID}&season=20212022`;
+  const scheduleUrl = `${BASE_URL}/schedule?teamId=${LEAFS_TEAM_ID}&season=20212022&gameStatus=R`;
 
   try {
     const response = await fetch(scheduleUrl);
     const data = (await response.json()) as ScheduleData;
 
-    const filtered = data.dates.filter(({ date }) => isDateInPast(date));
+    const filtered = data.dates.filter(({ games }) => {
+      const { statusCode } = games[0].status;
+      const isComplete = FINISHED_GAME_CODES.includes(statusCode);
+      return isComplete;
+    });
 
     const lastDay = filtered[filtered.length - 1];
     const { gamePk } = lastDay.games[0];
 
     return gamePk;
   } catch (error) {
-    return { error };
+    console.error(error);
+    //return { error };
   }
 }
 
-const isDateInPast = (dateString: string) =>
-  new Date(dateString).getTime() <= new Date().setHours(23, 59, 0, 0);
+// const isDateInPast = (dateString: string) =>
+//   new Date(dateString).getTime() <= new Date().setHours(23, 59, 0, 0);
 
 interface HighlightsData {
   highlights: {
@@ -41,11 +55,21 @@ interface HighlightsData {
       items: {
         id: string;
         type: 'video' | string;
+        date: string;
         title: string;
+        blurb: string;
         description: string;
         duration: string;
-        image: {};
+        authFlow: boolean;
+        mediaPlaybackId: string;
+        mediaState: string;
+        image: {
+          title: string;
+          altText: string;
+          cuts: {};
+        };
         playbacks: Playback[];
+        keywords: [];
       }[];
     };
   };
@@ -68,11 +92,16 @@ export async function getHighlightsFromGame(gameId: number) {
     const { items } = data.highlights.gameCenter;
 
     const parsed = items.map((item) => {
-      const { playbacks } = item;
+      const { playbacks, type, id, date, title, blurb, description } = item;
       const video = returnHighestQualityVideo(playbacks);
       return {
-        ...item,
+        _id: parseInt(id),
+        type,
+        date: new Date(date),
         video,
+        title,
+        blurb,
+        description,
       };
     });
 
@@ -82,8 +111,7 @@ export async function getHighlightsFromGame(gameId: number) {
     // separate
   } catch (error) {
     console.error(error);
-    return null;
-    // return { error };
+    return { error };
   }
 }
 
