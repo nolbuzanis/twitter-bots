@@ -46,6 +46,36 @@ export async function insertMany(collectionName: CollectionName, docs: {}[]) {
   }
 }
 
+interface Highlight {
+  _id: number;
+  type: string;
+  date: string;
+  video: {
+    url: string;
+  };
+  title: string;
+  blurb: string;
+  description: string;
+}
+
+export async function getLatestHighlight() {
+  try {
+    const collection = (await clientPromise)
+      .db(dbName)
+      .collection('highlights');
+
+    const query = { tweeted_at: { $exists: false } };
+
+    const latestHighlight = await collection.findOne<Highlight>(query, {
+      sort: { date: 'ascending' },
+    });
+
+    return latestHighlight;
+  } catch (error) {
+    return { error };
+  }
+}
+
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
 export default clientPromise;
