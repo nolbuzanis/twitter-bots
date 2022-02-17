@@ -105,10 +105,7 @@ export async function getHighlightsFromGame(gameId: number) {
       };
     });
 
-    // console.log(parsed);
-
     return parsed;
-    // separate
   } catch (error) {
     console.error(error);
     return { error };
@@ -119,8 +116,3 @@ const returnHighestQualityVideo = (playbacks: Playback[]) => {
   const mp4Videos = playbacks.filter(({ url }) => url.includes('.mp4'));
   return mp4Videos[mp4Videos.length - 1];
 };
-
-// (async function () {
-//   const id = await getLatestGameId();
-//   id && getHighlightsFromGame(id);
-// })();
