@@ -76,6 +76,21 @@ export async function getLatestHighlight() {
   }
 }
 
+export async function updateHighlightAsTweeted(docId: number) {
+  const collection = (await clientPromise).db(dbName).collection('highlights');
+
+  const query = { _id: docId };
+  const update = { $set: { tweeted_at: new Date() } };
+
+  try {
+    const updateRes = await collection.updateOne(query, update);
+    return updateRes;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+}
+
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
 export default clientPromise;
