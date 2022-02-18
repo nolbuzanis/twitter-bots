@@ -8,6 +8,6 @@ jobs:
     steps:
       - name: Call the store highlights route
         run: |
-          curl --request POST \
+          curl --request GET \
           --url 'https://buds-bot.vercel.app/api/storeHighlights' \
           --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
