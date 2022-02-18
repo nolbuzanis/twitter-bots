@@ -14,7 +14,11 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  await runMiddleware(request, response, cors);
+  try {
+    await runMiddleware(request, response, cors);
+  } catch (err) {
+    return response.status(401).json(err);
+  }
 
   const gameId = await getLatestGameId();
   if (!gameId) return response.status(500).json({ error: 'No game id found!' });
@@ -24,12 +28,16 @@ export default async function handler(
     return response.status(500).json(highlights);
   }
 
+  console.log('Inserting into mongo...');
   const result = await insertMany('highlights', highlights);
-  if ('error' in result) {
+  if (typeof result !== 'string') {
+    // if (result.error.writeErrors[0].err.code === 11000) {
+    // return response.status(200).json({ msg: 'Already created' });
+    // }
     return response.status(500).json(result);
   }
 
-  response.status(200).json({
+  response.status(201).json({
     msg: 'Success',
     ids: highlights.map(({ _id }) => _id),
   });

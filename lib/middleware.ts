@@ -15,7 +15,20 @@ export function runMiddleware(
         return reject(result);
       }
 
-      return resolve(result);
+      //check authorization header for api key
+      try {
+        const { authorization } = req.headers;
+
+        if (authorization === `Bearer ${process.env.API_SECRET_KEY}`) {
+          return resolve(result);
+        } else {
+          return reject(result);
+        }
+      } catch (err) {
+        return reject(result);
+      }
+
+      // return resolve(result);
     });
   });
 }

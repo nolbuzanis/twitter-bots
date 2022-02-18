@@ -40,7 +40,8 @@ export async function insertMany(collectionName: CollectionName, docs: {}[]) {
       .db(dbName)
       .collection(collectionName);
 
-    return collection.insertMany(docs);
+    await collection.insertMany(docs);
+    return 'Success!';
   } catch (error) {
     return { error };
   }

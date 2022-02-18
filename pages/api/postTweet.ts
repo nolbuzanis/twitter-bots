@@ -17,7 +17,11 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  await runMiddleware(request, response, cors);
+  try {
+    await runMiddleware(request, response, cors);
+  } catch (err) {
+    return response.status(401).json(err);
+  }
 
   const highlightToTweet = await getLatestHighlight();
 
