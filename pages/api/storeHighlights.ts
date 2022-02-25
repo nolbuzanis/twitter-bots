@@ -17,6 +17,10 @@ export default async function handler(
   try {
     await runMiddleware(request, response, cors);
   } catch (err) {
+    console.error(
+      'Failed authentication with auth: ',
+      request.headers.authorization
+    );
     return response.status(401).json(err);
   }
 
