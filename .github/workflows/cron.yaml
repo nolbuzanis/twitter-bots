@@ -11,6 +11,6 @@ jobs:
         uses: JamesIves/fetch-api-data-action@v2.1.0
         with:
           endpoint: https://buds-bot.vercel.app/api/test
-          configuration: '{ "method": "GET", "headers": {"Authorization": "Bearer ${{ secrets.API_SECRET_KEY }}"} }'
+          configuration: '{ "method": "GET", "headers": {"Authorization": "Bearer ${{ secrets.GITHUB_TOKEN }}"} }'
       
 
