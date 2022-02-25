@@ -2,12 +2,16 @@ name: store-highlights-15-min
 on:
   schedule:
     - cron: '*/15 * * * *'
+  workflow_dispatch:
 jobs:
   cron:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Call the store highlights route
         run: |
-          curl --request POST \
+          curl --request GET \
           --url 'https://buds-bot.vercel.app/api/storeHighlights' \
           --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
+          
+
