@@ -9,9 +9,12 @@ jobs:
     
     steps:
       - name: Call the store highlights route
+      - shell: bash
+        env:
+          API_SECRET_KEY: ${{ secrets.SuperSecret }}
         run: |
           curl --request GET \
           --url 'https://buds-bot.vercel.app/api/storeHighlights' \
-          --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
+          --header 'Authorization: Bearer "$API_SECRET_KEY"'
           
 
