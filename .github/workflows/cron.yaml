@@ -4,13 +4,13 @@ on:
 #     - cron: '*/15 * * * *'
   workflow_dispatch:
 jobs:
-  cron:
+  store-highlights:
     runs-on: ubuntu-latest
     steps:
       - name: Call the store highlights route
-        run: |
-          curl --request GET \
-          --url 'https://buds-bot.vercel.app/api/storeHighlights' \
-          --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
-          
+        uses: JamesIves/fetch-api-data-action@v2.1.0
+        with:
+          endpoint: https://buds-bot.vercel.app/api/storeHighlights
+          configuration: '{ "method": "GET", "headers": {"Authorization": "Bearer ${{ secrets.API_SECRET_KEY }}"} }'
+      
 
