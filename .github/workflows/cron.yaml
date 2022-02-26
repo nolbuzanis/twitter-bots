@@ -10,7 +10,7 @@ jobs:
       - name: Call the store highlights route
         uses: JamesIves/fetch-api-data-action@v2.1.0
         with:
-          endpoint: https://buds-bot.vercel.app/api/test
+          endpoint: https://buds-bot.vercel.app/api/storeHighlights
           configuration: '{ "method": "GET", "headers": {"Authorization": "Bearer ${{ secrets.API_SECRET_KEY }}"} }'
       
 
