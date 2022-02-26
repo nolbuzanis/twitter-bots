@@ -1,8 +1,8 @@
 name: store-highlights-15-min
 on:
-#   schedule:
-#     - cron: '*/15 * * * *'
-  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+#   workflow_dispatch:
 jobs:
   store-highlights:
     runs-on: ubuntu-latest
