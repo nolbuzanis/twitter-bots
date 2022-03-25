@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { insertMany } from '../../lib/mongodb';
-import { getHighlightsFromGame, getLatestGameId } from '../../lib/nhl';
+import { insertMany } from '../../src/lib/mongodb';
+import { getHighlightsFromGame, getLatestGameId } from '../../src/lib/nhl';
 
 import Cors from 'cors';
-import { runMiddleware } from '../../lib/middleware';
+import { runMiddleware } from '../../src/lib/middleware';
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -32,17 +32,19 @@ export default async function handler(
     return response.status(500).json(highlights);
   }
 
+  let writeErrors = [];
+
   console.log('Inserting into mongo...');
   const result = await insertMany('highlights', highlights);
   if (typeof result !== 'string') {
-    // if (result.error.writeErrors[0].err.code === 11000) {
-    // return response.status(200).json({ msg: 'Already created' });
-    // }
+    if (result.error.writeErrors) {
+      ({ writeErrors } = result.error);
+    }
     return response.status(500).json(result);
   }
 
   response.status(201).json({
     msg: 'Success',
-    ids: highlights.map(({ _id }) => _id),
+    addedIds: highlights.map(({ _id }) => _id),
   });
 }

@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import {
   getLatestHighlight,
   updateHighlightAsTweeted,
-} from '../../lib/mongodb';
+} from '../../src/lib/mongodb';
 
 import Cors from 'cors';
-import { runMiddleware } from '../../lib/middleware';
-import { postTweet, uploadMedia } from '../../lib/twitter';
+import { runMiddleware } from '../../src/lib/middleware';
+import { postTweet, uploadMedia } from '../../src/lib/twitter';
 
 // Initializing the cors middleware
 const cors = Cors({
