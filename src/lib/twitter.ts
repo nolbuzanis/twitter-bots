@@ -25,7 +25,7 @@ const twitterClient = new TwitterApi({
 });
 const client = twitterClient.readWrite;
 
-export async function postTweet(payload: SendTweetV2Params) {
+export async function post(payload: SendTweetV2Params) {
   try {
     return client.v2.tweet(payload);
   } catch (error) {

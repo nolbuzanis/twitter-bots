@@ -1,6 +1,9 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
+import {
+  errorResponse,
+  response,
+  ValidatedEventAPIGatewayProxyEvent,
+} from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import { APIGatewayProxyResult } from 'aws-lambda';
 
 import { insertMany } from '../../lib/mongodb';
 import { getHighlightsFromGame, getLatestGameId } from '../../lib/nhl';
@@ -54,14 +57,5 @@ const storeHighlights: ValidatedEventAPIGatewayProxyEvent<void> = async (
     ids,
   });
 };
-
-const errorResponse = (error) => response(500, { error });
-
-function response(statusCode = 200, body): APIGatewayProxyResult {
-  return {
-    statusCode,
-    body,
-  };
-}
 
 export const main = middyfy(storeHighlights);

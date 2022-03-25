@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 import storeHighlights from '@functions/storeHighlights';
+import postTweet from '@functions/postTweet';
 
 const serverlessConfiguration: AWS = {
   service: 'buds-bot',
@@ -9,17 +10,13 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
-    apiGateway: {
-      minimumCompressionSize: 1024,
-      shouldStartNameWithService: true,
-    },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
   },
   // import the function via paths
-  functions: { storeHighlights },
+  functions: { storeHighlights, postTweet },
   package: { individually: true },
   custom: {
     esbuild: {

@@ -6,7 +6,7 @@ import {
 
 import Cors from 'cors';
 import { runMiddleware } from '../../src/lib/middleware';
-import { postTweet, uploadMedia } from '../../src/lib/twitter';
+import { post, uploadMedia } from '../../src/lib/twitter';
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -38,7 +38,7 @@ export default async function handler(
     return response.status(500).json(id);
   }
 
-  const tweetResponse = await postTweet({
+  const tweetResponse = await post({
     text: highlightToTweet.description,
     media: { media_ids: [id] },
   });
