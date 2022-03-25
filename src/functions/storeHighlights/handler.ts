@@ -37,12 +37,13 @@ const storeHighlights: ValidatedEventAPIGatewayProxyEvent<void> = async (
   }
 
   console.log('Inserting into mongo...');
-  let writeErrors;
+  const ids = highlights.map(({ _id }) => _id);
 
   const result = await insertMany('highlights', highlights);
   if (typeof result !== 'string') {
     if (result.error.writeErrors) {
-      ({ writeErrors } = result.error);
+      const { writeErrors } = result.error;
+      return response(200, { ids, writeErrors });
     } else {
       return errorResponse(result.error);
     }
@@ -50,8 +51,7 @@ const storeHighlights: ValidatedEventAPIGatewayProxyEvent<void> = async (
 
   return response(201, {
     msg: 'Success',
-    ids: highlights.map(({ _id }) => _id),
-    writeErrors,
+    ids,
   });
 };
 
