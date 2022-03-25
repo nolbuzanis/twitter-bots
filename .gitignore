@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# package directories
+jspm_packages
+
 # testing
 /coverage
 
@@ -35,3 +38,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Serverless directories
+.serverless
+
+# esbuild directories
+.esbuild
