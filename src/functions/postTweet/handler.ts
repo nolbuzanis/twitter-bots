@@ -11,9 +11,7 @@ import {
   updateHighlightAsTweeted,
 } from '../../lib/mongodb';
 
-const postTweet: ValidatedEventAPIGatewayProxyEvent<void> = async (
-  _request
-) => {
+const postTweet: ValidatedEventAPIGatewayProxyEvent<void> = async () => {
   const highlightToTweet = await getLatestHighlight();
 
   if (!highlightToTweet) {

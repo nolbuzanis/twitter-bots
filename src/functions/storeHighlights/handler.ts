@@ -8,29 +8,7 @@ import { middyfy } from '@libs/lambda';
 import { insertMany } from '../../lib/mongodb';
 import { getHighlightsFromGame, getLatestGameId } from '../../lib/nhl';
 
-// import Cors from 'cors';
-// import { runMiddleware } from '../../lib/middleware';
-
-// Initializing the cors middleware
-// const cors = Cors({
-//   methods: ['GET', 'HEAD'],
-// });
-
-const storeHighlights: ValidatedEventAPIGatewayProxyEvent<void> = async (
-  _request
-) => {
-  // try {
-  //   //await runMiddleware(request, response, cors);
-  // } catch (err) {
-  //   console.error(
-  //     'Failed authentication with auth: ',
-  //     request.headers.authorization
-  //   );
-  //   return response(401, {
-  //     error: err,
-  //   });
-  // }
-
+const storeHighlights: ValidatedEventAPIGatewayProxyEvent<void> = async () => {
   const gameId = await getLatestGameId();
   if (!gameId) return errorResponse('No game id found!');
 
