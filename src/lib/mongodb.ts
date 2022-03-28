@@ -68,7 +68,7 @@ export async function getLatestHighlight() {
     const query = { tweeted_at: { $exists: false } };
 
     const latestHighlight = await collection.findOne<Highlight>(query, {
-      sort: { date: 'ascending' },
+      sort: { date: 1 }, //ascending
     });
 
     return latestHighlight;
