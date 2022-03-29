@@ -1,30 +1,33 @@
-import {
-  response,
-  ValidatedEventAPIGatewayProxyEvent,
-  errorResponse,
-} from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import { post, uploadMedia } from 'src/lib/twitter';
 
 import {
+  deleteHighlight,
   getLatestHighlight,
   updateHighlightAsTweeted,
 } from '../../lib/mongodb';
 
-const postTweet: ValidatedEventAPIGatewayProxyEvent<void> = async () => {
+const postTweet = async () => {
   const highlightToTweet = await getLatestHighlight();
 
   if (!highlightToTweet) {
-    return response(404, { msg: 'No highlights found' });
+    return { msg: 'No highlights found' };
   }
 
   if ('error' in highlightToTweet) {
-    return errorResponse(highlightToTweet.error);
+    throw new Error(highlightToTweet.error);
   }
   const id = await uploadMedia(highlightToTweet.video.url);
 
   if (typeof id !== 'string') {
-    return errorResponse(id.error);
+
+    //if processing error, delete the highlight (deprecate later when long vids are no longer being stored)
+    if(id.error.message === 'Failed to process the media.'){
+      await deleteHighlight(highlightToTweet._id);
+      return postTweet();
+    }
+
+    throw new Error(id.error + JSON.stringify(highlightToTweet));
   }
 
   const tweetResponse = await post({
@@ -33,15 +36,15 @@ const postTweet: ValidatedEventAPIGatewayProxyEvent<void> = async () => {
   });
 
   if ('error' in tweetResponse) {
-    return errorResponse(tweetResponse.error);
+    throw new Error(tweetResponse.error);
   }
 
   const updatedResult = await updateHighlightAsTweeted(highlightToTweet._id);
   if ('error' in updatedResult) {
-    return errorResponse(updatedResult.error);
+    throw new Error(updatedResult.error);
   }
 
-  response(200, highlightToTweet);
+  return highlightToTweet;
 };
 
 export const main = middyfy(postTweet);

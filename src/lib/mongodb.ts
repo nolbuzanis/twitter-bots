@@ -57,6 +57,7 @@ interface Highlight {
   title: string;
   blurb: string;
   description: string;
+  duration: number;
 }
 
 export async function getLatestHighlight() {
@@ -88,6 +89,22 @@ export async function updateHighlightAsTweeted(docId: number) {
     return updateRes;
   } catch (error) {
     console.error(error);
+    return { error };
+  }
+}
+
+export async function deleteHighlight(id: number) {
+  try {
+    const collection = (await clientPromise)
+      .db(dbName)
+      .collection('highlights');
+
+    await collection.deleteOne({
+      _id: id,
+    })
+
+    return 'Deleted!';
+  } catch (error) {
     return { error };
   }
 }
