@@ -42,12 +42,8 @@ export async function getLatestGameId() {
     return gamePk;
   } catch (error) {
     console.error(error);
-    //return { error };
   }
 }
-
-// const isDateInPast = (dateString: string) =>
-//   new Date(dateString).getTime() <= new Date().setHours(23, 59, 0, 0);
 
 interface HighlightsData {
   highlights: {
@@ -92,8 +88,9 @@ export async function getHighlightsFromGame(gameId: number) {
     const { items } = data.highlights.gameCenter;
 
     const parsed = items.map((item) => {
-      const { playbacks, type, id, date, title, blurb, description } = item;
+      const { playbacks, type, id, date, title, blurb, description, duration } = item;
       const video = returnHighestQualityVideo(playbacks);
+      
       return {
         _id: parseInt(id),
         type,
@@ -102,8 +99,9 @@ export async function getHighlightsFromGame(gameId: number) {
         title,
         blurb,
         description,
+        duration: getDurationInMS(duration),
       };
-    });
+    }).filter(({duration}) => duration <= 140);
 
     return parsed;
   } catch (error) {
@@ -116,3 +114,5 @@ const returnHighestQualityVideo = (playbacks: Playback[]) => {
   const mp4Videos = playbacks.filter(({ url }) => url.includes('.mp4'));
   return mp4Videos[mp4Videos.length - 1];
 };
+
+const getDurationInMS = (duration) => parseInt(duration.split(':')[0]) * 60 + parseInt(duration.split(':')[1]);
