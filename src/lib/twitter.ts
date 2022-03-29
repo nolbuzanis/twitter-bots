@@ -1,4 +1,4 @@
-import { SendTweetV2Params, TwitterApi } from 'twitter-api-v2';
+import { SendTweetV2Params, TwitterApi, EUploadMimeType } from 'twitter-api-v2';
 import axios from 'axios';
 
 const {
@@ -39,7 +39,7 @@ export async function uploadMedia(url: string) {
     const buffer = Buffer.from(response.data, 'utf-8');
 
     const media_id = await client.v1.uploadMedia(buffer, {
-      type: 'mp4',
+      mimeType: EUploadMimeType.Mp4,
     });
     return media_id;
   } catch (error) {
