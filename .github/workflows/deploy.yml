@@ -36,3 +36,4 @@ jobs:
         TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
         TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
