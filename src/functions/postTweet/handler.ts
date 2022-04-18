@@ -1,5 +1,5 @@
 import { middyfy } from '@libs/lambda';
-import { post, uploadMedia } from 'src/lib/twitter';
+import { getHashtags, post, uploadMedia } from 'src/lib/twitter';
 
 import {
   deleteHighlight,
@@ -30,8 +30,14 @@ const postTweet = async () => {
     throw new Error(id.error + JSON.stringify(highlightToTweet));
   }
 
+  const text = `
+  ${highlightToTweet.description}
+  \n
+  ${getHashtags(2)}
+  `;
+
   const tweetResponse = await post({
-    text: highlightToTweet.description,
+    text,
     media: { media_ids: [id] },
   });
 

@@ -25,6 +25,17 @@ const twitterClient = new TwitterApi({
 });
 const client = twitterClient.readWrite;
 
+const HASHTAGS = [
+  'LeafsForever',
+  'MapleLeafs',
+  'nhl',
+  'leafs',
+  'TorontoMapleLeafs',
+  'goleafsgo',
+  'leafsnation',
+  'toronto',
+];
+
 export async function post(payload: SendTweetV2Params) {
   try {
     return client.v2.tweet(payload);
@@ -45,4 +56,12 @@ export async function uploadMedia(url: string) {
   } catch (error) {
     return { error };
   }
+}
+
+export function getHashtags(count: number){
+  let returned = '';
+  for(let i = 0; i < count; i++){
+    returned += `#${HASHTAGS[Math.floor(Math.random() * HASHTAGS.length)]} `;
+  }
+  return returned;
 }
