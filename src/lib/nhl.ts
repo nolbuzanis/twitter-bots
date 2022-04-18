@@ -1,4 +1,6 @@
 import fetch from 'node-fetch';
+import {decode} from 'he';
+
 const LEAFS_TEAM_ID = 10;
 const BASE_URL = 'https://statsapi.web.nhl.com/api/v1';
 
@@ -96,9 +98,9 @@ export async function getHighlightsFromGame(gameId: number) {
         type,
         date: new Date(date),
         video,
-        title,
-        blurb,
-        description,
+        title: decode(title),
+        blurb: decode(blurb),
+        description: decode(description),
         duration: getDurationInMS(duration),
       };
     }).filter(({duration}) => duration <= 140);
