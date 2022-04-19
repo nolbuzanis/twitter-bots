@@ -1,5 +1,5 @@
 {
-  "name": "buds-bot",
+  "name": "twitter-bots",
   "version": "1.0.0",
   "description": "",
   "main": "serverless.ts",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nolbuzanis/buds-bot.git"
+    "url": "git+https://github.com/nolbuzanis/twitter-bots.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nolbuzanis/buds-bot/issues"
+    "url": "https://github.com/nolbuzanis/twitter-bots/issues"
   },
-  "homepage": "https://github.com/nolbuzanis/buds-bot#readme",
+  "homepage": "https://github.com/nolbuzanis/twitter-bots#readme",
   "devDependencies": {
     "@serverless/typescript": "^3.8.0",
     "@types/aws-lambda": "^8.10.71",
