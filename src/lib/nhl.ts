@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import {decode} from 'he';
+import { decode } from 'he';
 
 const LEAFS_TEAM_ID = 10;
 const BASE_URL = 'https://statsapi.web.nhl.com/api/v1';
@@ -26,7 +26,7 @@ interface ScheduleData {
 const FINISHED_GAME_CODES = ['5', '6', '7'];
 
 export async function getLatestGameId() {
-  const scheduleUrl = `${BASE_URL}/schedule?teamId=${LEAFS_TEAM_ID}&season=20212022&gameStatus=R`;
+  const scheduleUrl = `${BASE_URL}/schedule?teamId=${LEAFS_TEAM_ID}&season=20222023&gameStatus=R`;
 
   try {
     const response = await fetch(scheduleUrl);
@@ -92,7 +92,7 @@ export async function getHighlightsFromGame(gameId: number) {
     const parsed = items.map((item) => {
       const { playbacks, type, id, date, title, blurb, description, duration } = item;
       const video = returnHighestQualityVideo(playbacks);
-      
+
       return {
         _id: parseInt(id),
         type,
@@ -103,7 +103,7 @@ export async function getHighlightsFromGame(gameId: number) {
         description: decode(description),
         duration: getDurationInMS(duration),
       };
-    }).filter(({duration}) => duration <= 140);
+    }).filter(({ duration }) => duration <= 140);
 
     return parsed;
   } catch (error) {
